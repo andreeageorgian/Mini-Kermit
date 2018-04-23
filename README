@@ -1,0 +1,51 @@
+Georgian Andreea - 321 CB
+-----------------------------
+Tema 1 - MINIKERMIT
+-----------------------------
+	Voi incepe prin a spune ca tema functioneaza numai pentru
+cazul ideal, pentru un canal fara erori.
+	Pentru implementarea temei, am folosit 3 structuri: o 
+structura pentru pachetele de tip S, o structura pentru campul 
+data al pachetului S si o structura pentru celelalte tipuri de 
+pachete.
+	In SENDER:
+	- trimit un pachet S si astept raspuns: daca nu primesc raspuns 
+in 5 secunde, ies din program, daca primesc un pachet de tip NAK ies din 
+program, iar daca primesc un pachet ACK trec mai departe la trimiterea 
+numarului de fisiere
+	- trimit numarul de fisiere si astept confirmarea
+	- dupa primirea confirmarii, pentru fiecare fisier trimit catre 
+receiver un pachet de tipul F, care contine numele fisierului; dupa 
+confirmare, trimit dimensiunea fisierului, iar dupa ce primesc confirmarea 
+pentru primirea acesteia intru intr-o bucla in care instantiez un pachet 
+de tip F in care pun maxim MAXL caractere pe care le extrag din fisier 
+folosind functia read; trimit pachetul catre receiver, iar daca primesc 
+ca raspuns ACK, reexecut bucla pana cand fisierul este transmis integral;
+	- dupa transmiterea integrala a fisierului, transmit un pachet 
+de tip Z; daca primesc confirmare pentru primirea acestuia, inchid 
+fisierului, altfel ies din program;
+	- dupa transmiterea tuturor fisierelor, ies din bucla folosindu-ma 
+de un pachet de tip B a carui confirmare determina programul sa iasa din 
+bucla
+
+	In RECEIVER:
+	- initial astept primirea unui pachet de tip S; daca nu primesc un 
+mesaj sau mesajul nu este cel asteptat parasesc programul, iar daca 
+mesajul este corect, continuam
+	- astept sa primesc numarul de fisiere si daca il confirm, incepem 
+primirea de fisiere
+	- astept primirea unui pachet de tip F care contine numele fisierului, 
+il confirm sau nu si extrag numele fisierului pe care il concatenez cu "recv_" 
+pentru a obtine fisierul in care voi scrie
+	- astept primirea dimensiunii fisierului si il confirm sau nu
+	- daca dimensiunea a fost confirmata, astept sa primesc un pachet de tip 
+D in care se afla o portiune din fisierul sursa sau intregul fisier; verific 
+pachetul D primit si daca reusesc sa il confirm scriu in fisierul nou datele 
+din campul data al pachetului D pana cand dimensiunea fisierului initial devine 
+0
+	- dupa ce am terminat de scris in noul fisier, astept primirea unui nou 
+pachet de tip Z si il verific, trimitand rezultatul catre sender; daca am 
+confirmat pachetul Z, inchid fisierul
+	- dupa ce am terminat de scris toate fisierele, astept primirea unui nou 
+pachet de tip B si il verific, trimitand rezultatul catre sender; daca am 
+confirmat pachetul B, parasesc bucla
